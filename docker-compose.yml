@@ -1,0 +1,15 @@
+services:
+  libretv:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: libretv
+    environment:
+      - MAX_RETRIES=0
+    restart: unless-stopped
+    networks:
+      - libretv-net
+
+networks:
+  libretv-net:
+    external: true

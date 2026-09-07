@@ -1,0 +1,794 @@
+/* =========================================================
+   LibreTV 首页现代影视平台 UI
+   仅修改视觉，不修改任何功能
+   ========================================================= */
+
+
+/* =========================
+   页面基础
+   ========================= */
+
+html,
+body {
+    background: #08090c !important;
+    color: #f2f3f5;
+}
+
+body.page-bg {
+    background:
+        radial-gradient(
+            ellipse 90% 50% at 50% -10%,
+            rgba(100, 117, 255, 0.12),
+            transparent 65%
+        ),
+        linear-gradient(
+            180deg,
+            #08090c 0%,
+            #0b0d12 55%,
+            #08090c 100%
+        ) !important;
+}
+
+
+/* =========================
+   顶部按钮
+   ========================= */
+
+.fixed.top-4.left-4,
+.fixed.top-4.right-4 {
+    top: 18px !important;
+}
+
+.fixed.top-4.left-4 button,
+.fixed.top-4.right-4 button {
+    width: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: rgba(22, 24, 30, 0.88) !important;
+    color: #aeb4c0 !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 50% !important;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    transition: all 0.2s ease !important;
+}
+
+.fixed.top-4.left-4 button:hover,
+.fixed.top-4.right-4 button:hover {
+    background: rgba(40, 43, 52, 0.95) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    transform: translateY(-2px);
+}
+
+.fixed.top-4.left-4 svg,
+.fixed.top-4.right-4 svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+
+/* =========================
+   Logo
+   ========================= */
+
+header {
+    padding-top: 8px;
+}
+
+header a {
+    text-decoration: none !important;
+}
+
+header a > svg {
+    width: 42px !important;
+    height: 42px !important;
+    margin-right: 12px !important;
+
+    color: #7280ff !important;
+
+    filter:
+        drop-shadow(
+            0 5px 18px rgba(100, 117, 255, 0.25)
+        );
+}
+
+header h1 {
+    font-size: 3.4rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.04em;
+}
+
+header > p {
+    color: #777e8d !important;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+}
+
+
+/* =========================
+   Gradient Text
+   ========================= */
+
+.gradient-text {
+    background: linear-gradient(
+        135deg,
+        #7180ff,
+        #9275ff
+    ) !important;
+
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+
+    -webkit-text-fill-color: transparent !important;
+}
+
+
+/* =========================
+   搜索区域
+   ========================= */
+
+#searchArea {
+    justify-content: center;
+}
+
+#searchArea > div {
+    max-width: 760px !important;
+}
+
+
+/* 搜索框主体 */
+
+#searchArea > div > div:first-child {
+    height: 62px !important;
+
+    display: flex !important;
+    align-items: stretch !important;
+
+    background: rgba(18, 20, 26, 0.92) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+
+    border-radius: 999px !important;
+
+    overflow: hidden !important;
+
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.015);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+
+/* 首页按钮 */
+
+#searchArea > div > div:first-child > button:first-child {
+    width: 82px !important;
+    min-width: 82px !important;
+
+    margin: 6px !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    background: rgba(255, 255, 255, 0.055) !important;
+
+    color: #aeb4c0 !important;
+
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+
+    transition: all 0.2s ease !important;
+}
+
+#searchArea > div > div:first-child > button:first-child:hover {
+    background: rgba(255, 255, 255, 0.11) !important;
+    color: #ffffff !important;
+}
+
+
+/* 搜索输入 */
+
+#searchInput {
+    flex: 1 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    color: #f5f6f8 !important;
+
+    padding-left: 18px !important;
+    padding-right: 8px !important;
+
+    font-size: 1rem !important;
+
+    box-shadow: none !important;
+}
+
+#searchInput::placeholder {
+    color: #6f7683 !important;
+}
+
+#searchInput:focus {
+    outline: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+
+/* 清除按钮 */
+
+#clearSearchInput {
+    background: transparent !important;
+    border: 0 !important;
+
+    color: #6d7481 !important;
+}
+
+#clearSearchInput:hover {
+    color: #ffffff !important;
+}
+
+
+/* 搜索按钮 */
+
+#searchArea > div > div:first-child > button:last-child {
+    width: 92px !important;
+    min-width: 92px !important;
+
+    margin: 6px !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6475ff,
+            #8468ff
+        ) !important;
+
+    color: #ffffff !important;
+
+    font-weight: 600 !important;
+
+    box-shadow:
+        0 7px 22px rgba(100, 117, 255, 0.28);
+
+    transition: all 0.2s ease !important;
+}
+
+#searchArea > div > div:first-child > button:last-child:hover {
+    filter: brightness(1.08);
+    transform: scale(1.02);
+
+    box-shadow:
+        0 9px 28px rgba(100, 117, 255, 0.38);
+}
+
+
+/* =========================
+   最近搜索
+   ========================= */
+
+#recentSearches {
+    padding: 0 8px !important;
+}
+
+#recentSearches > * {
+    background: rgba(255, 255, 255, 0.035) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+
+    color: #858c9b !important;
+
+    border-radius: 999px !important;
+
+    transition: all 0.2s ease !important;
+}
+
+#recentSearches > *:hover {
+    background: rgba(100, 117, 255, 0.10) !important;
+
+    border-color: rgba(100, 117, 255, 0.25) !important;
+
+    color: #e3e6ff !important;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   豆瓣区域
+   ========================= */
+
+#doubanArea {
+    margin-top: 28px !important;
+    margin-bottom: 28px !important;
+}
+
+#doubanArea > div {
+    max-width: 1400px !important;
+}
+
+#doubanArea h2 {
+    color: #f0f2f5 !important;
+
+    font-size: 1.15rem !important;
+
+    font-weight: 600 !important;
+}
+
+
+/* 电影 / 电视剧 */
+
+#doubanArea .bg-\[\#222\] {
+    background: rgba(255, 255, 255, 0.045) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+#douban-movie-toggle,
+#douban-tv-toggle {
+    border-radius: 999px !important;
+    transition: all 0.2s ease !important;
+}
+
+#douban-movie-toggle {
+    background:
+        linear-gradient(
+            135deg,
+            #6475ff,
+            #8468ff
+        ) !important;
+}
+
+
+/* 换一批 */
+
+#douban-refresh {
+    background: rgba(255, 255, 255, 0.045) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+
+    border-radius: 999px !important;
+
+    color: #aeb4c0 !important;
+
+    transition: all 0.2s ease !important;
+}
+
+#douban-refresh:hover {
+    background: rgba(255, 255, 255, 0.10) !important;
+
+    color: #ffffff !important;
+}
+
+
+/* 豆瓣分类标签 */
+
+#douban-tags > * {
+    background: rgba(255, 255, 255, 0.035) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+
+    border-radius: 999px !important;
+
+    color: #858c9b !important;
+
+    transition: all 0.2s ease !important;
+}
+
+#douban-tags > *:hover {
+    background: rgba(100, 117, 255, 0.10) !important;
+
+    border-color: rgba(100, 117, 255, 0.25) !important;
+
+    color: #e3e6ff !important;
+}
+
+
+/* =========================
+   搜索结果区域
+   ========================= */
+
+#resultsArea {
+    width: 100% !important;
+}
+
+#resultsArea > div {
+    max-width: 1400px !important;
+}
+
+#searchResultsCount {
+    color: #858c99 !important;
+}
+
+
+/* =========================
+   影视结果网格
+   ========================= */
+
+#results {
+    display: grid !important;
+
+    gap: 18px !important;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr)) !important;
+}
+
+
+/* =========================
+   影视卡片
+   ========================= */
+
+#results .card-hover {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    background: #111319 !important;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.07) !important;
+
+    border-radius: 12px !important;
+
+    overflow: hidden !important;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.22);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease !important;
+}
+
+#results .card-hover:hover {
+    transform: translateY(-6px) !important;
+
+    border-color:
+        rgba(100, 117, 255, 0.30) !important;
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.42),
+        0 0 0 1px rgba(100, 117, 255, 0.08);
+}
+
+
+/* 禁用旧卡片装饰 */
+
+#results .card-hover::before,
+#results .card-hover::after {
+    pointer-events: none;
+}
+
+
+/* =========================
+   海报
+   ========================= */
+
+#results .search-card-img-container {
+    width: 100% !important;
+
+    height: 285px !important;
+
+    flex-shrink: 0 !important;
+
+    overflow: hidden !important;
+
+    position: relative !important;
+
+    background: #15171d !important;
+}
+
+
+#results .search-card-img-container img {
+    width: 100% !important;
+
+    height: 100% !important;
+
+    object-fit: cover !important;
+
+    display: block !important;
+
+    transition:
+        transform 0.45s ease,
+        filter 0.45s ease !important;
+}
+
+
+#results .card-hover:hover
+.search-card-img-container img {
+    transform: scale(1.045);
+}
+
+
+/* 海报底部暗部 */
+
+#results .search-card-img-container::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 40%;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.60),
+            transparent
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   卡片文字
+   ========================= */
+
+#results .card-hover .p-2 {
+    padding: 12px !important;
+
+    background: #111319 !important;
+}
+
+
+#results .card-hover h3 {
+    color: #f0f2f5 !important;
+
+    font-size: 0.92rem !important;
+
+    line-height: 1.35rem !important;
+
+    font-weight: 600 !important;
+
+    margin-bottom: 4px !important;
+}
+
+
+#results .card-hover p {
+    color: #777e8c !important;
+
+    font-size: 0.75rem !important;
+
+    line-height: 1.15rem !important;
+}
+
+
+/* =========================
+   页脚
+   ========================= */
+
+.footer {
+    margin-top: 60px !important;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent,
+            rgba(8, 9, 12, 0.96)
+        ) !important;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+
+/* =========================
+   弹窗
+   ========================= */
+
+#modal > div,
+#passwordModal > div,
+#disclaimerModal > div {
+    background: #111319 !important;
+
+    border-color:
+        rgba(255, 255, 255, 0.08) !important;
+
+    border-radius: 16px !important;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.55);
+}
+
+
+/* 弹窗关闭按钮 */
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.045) !important;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.07) !important;
+
+    color: #969daa !important;
+
+    border-radius: 50% !important;
+
+    transition: all 0.2s ease !important;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.10) !important;
+    color: #ffffff !important;
+}
+
+
+/* =========================
+   Toast
+   ========================= */
+
+#toast {
+    border-radius: 999px !important;
+
+    background: rgba(28, 30, 38, 0.95) !important;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08) !important;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.35);
+}
+
+
+/* =========================
+   手机端
+   ========================= */
+
+@media (max-width: 640px) {
+
+    header h1 {
+        font-size: 2.7rem !important;
+    }
+
+    header a > svg {
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    #searchArea > div {
+        max-width: 100% !important;
+    }
+
+    #searchArea > div > div:first-child {
+        height: 54px !important;
+    }
+
+    #searchArea > div > div:first-child > button:first-child {
+        width: 58px !important;
+        min-width: 58px !important;
+        font-size: 0.75rem !important;
+    }
+
+    #searchArea > div > div:first-child > button:last-child {
+        width: 68px !important;
+        min-width: 68px !important;
+        font-size: 0.8rem !important;
+    }
+
+    #searchInput {
+        font-size: 0.9rem !important;
+        padding-left: 10px !important;
+    }
+
+    #results {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 10px !important;
+    }
+
+    #results .search-card-img-container {
+        height: 230px !important;
+    }
+
+    #results .card-hover {
+        border-radius: 9px !important;
+    }
+
+    #results .card-hover .p-2 {
+        padding: 9px !important;
+    }
+
+    #results .card-hover h3 {
+        font-size: 0.82rem !important;
+
+        line-height: 1.15rem !important;
+    }
+
+    #results .card-hover p {
+        font-size: 0.68rem !important;
+    }
+
+    #doubanArea {
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+
+/* =========================
+   平板
+   ========================= */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+
+    #results {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    #results .search-card-img-container {
+        height: 270px !important;
+    }
+}
+
+
+/* =========================
+   普通桌面
+   ========================= */
+
+@media (min-width: 1025px) and (max-width: 1399px) {
+
+    #results {
+        grid-template-columns:
+            repeat(5, minmax(0, 1fr)) !important;
+    }
+
+    #results .search-card-img-container {
+        height: 280px !important;
+    }
+}
+
+
+/* =========================
+   大屏
+   ========================= */
+
+@media (min-width: 1400px) {
+
+    #results {
+        grid-template-columns:
+            repeat(6, minmax(0, 1fr)) !important;
+    }
+
+    #results .search-card-img-container {
+        height: 300px !important;
+    }
+}
+
+
+/* =========================
+   减少动画
+   ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
