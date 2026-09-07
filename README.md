@@ -36,6 +36,7 @@
 
 5. **启动开发服务器**
    ```bash
+docker compose up -d
    ```
 
 6. **访问应用**
