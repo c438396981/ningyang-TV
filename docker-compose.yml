@@ -1,15 +1,15 @@
 services:
-  libretv:
+  ningyangtv:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: libretv
+    container_name: ningyangtv
     environment:
       - MAX_RETRIES=0
     restart: unless-stopped
     networks:
-      - libretv-net
+      - ningyangtv-net
 
 networks:
-  libretv-net:
+  ningyangtv-net:
     external: true
