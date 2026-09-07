@@ -1,10 +1,10 @@
+```js
 import path from 'path';
 import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import crypto from 'crypto';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -14,7 +14,6 @@ const __dirname = path.dirname(__filename);
 
 const config = {
   port: process.env.PORT || 8080,
-  password: process.env.PASSWORD || '',
   corsOrigin: process.env.CORS_ORIGIN || '*',
   timeout: parseInt(process.env.REQUEST_TIMEOUT || '5000'),
   maxRetries: parseInt(process.env.MAX_RETRIES || '2'),
@@ -44,97 +43,94 @@ app.use((req, res, next) => {
   next();
 });
 
-function sha256Hash(input) {
-  return new Promise((resolve) => {
-    const hash = crypto.createHash('sha256');
-    hash.update(input);
-    resolve(hash.digest('hex'));
-  });
-}
+// ==================== 页面路由 ====================
 
-async function renderPage(filePath, password) {
-  let content = fs.readFileSync(filePath, 'utf8');
-  if (password !== '') {
-    const sha256 = await sha256Hash(password);
-    content = content.replace('{{PASSWORD}}', sha256);
-  } else {
-    content = content.replace('{{PASSWORD}}', '');
-  }
-  return content;
-}
-
-app.get(['/', '/index.html', '/player.html'], async (req, res) => {
+app.get(['/', '/index.html', '/player.html'], (req, res) => {
   try {
     let filePath;
+
     switch (req.path) {
       case '/player.html':
         filePath = path.join(__dirname, 'player.html');
         break;
-      default: // '/' 和 '/index.html'
+
+      default:
+        // / 和 /index.html
         filePath = path.join(__dirname, 'index.html');
         break;
     }
-    
-    const content = await renderPage(filePath, config.password);
+
+    const content = fs.readFileSync(filePath, 'utf8');
     res.send(content);
   } catch (error) {
-    console.error('页面渲染错误:', error);
+    console.error('页面读取错误:', error);
     res.status(500).send('读取静态页面失败');
   }
 });
 
-app.get('/s=:keyword', async (req, res) => {
+app.get('/s=:keyword', (req, res) => {
   try {
     const filePath = path.join(__dirname, 'index.html');
-    const content = await renderPage(filePath, config.password);
+    const content = fs.readFileSync(filePath, 'utf8');
     res.send(content);
   } catch (error) {
-    console.error('搜索页面渲染错误:', error);
+    console.error('搜索页面读取错误:', error);
     res.status(500).send('读取静态页面失败');
   }
 });
+
+// ==================== URL 安全验证 ====================
 
 function isValidUrl(urlString) {
   try {
     const parsed = new URL(urlString);
     const allowedProtocols = ['http:', 'https:'];
-    
+
     // 从环境变量获取阻止的主机名列表
-    const blockedHostnames = (process.env.BLOCKED_HOSTS || 'localhost,127.0.0.1,0.0.0.0,::1').split(',');
-    
+    const blockedHostnames = (
+      process.env.BLOCKED_HOSTS ||
+      'localhost,127.0.0.1,0.0.0.0,::1'
+    ).split(',');
+
     // 从环境变量获取阻止的 IP 前缀
-    const blockedPrefixes = (process.env.BLOCKED_IP_PREFIXES || '192.168.,10.,172.').split(',');
-    
-    if (!allowedProtocols.includes(parsed.protocol)) return false;
-    if (blockedHostnames.includes(parsed.hostname)) return false;
-    
-    for (const prefix of blockedPrefixes) {
-      if (parsed.hostname.startsWith(prefix)) return false;
+    const blockedPrefixes = (
+      process.env.BLOCKED_IP_PREFIXES ||
+      '192.168.,10.,172.'
+    ).split(',');
+
+    if (!allowedProtocols.includes(parsed.protocol)) {
+      return false;
     }
-    
+
+    if (blockedHostnames.includes(parsed.hostname)) {
+      return false;
+    }
+
+    for (const prefix of blockedPrefixes) {
+      if (parsed.hostname.startsWith(prefix)) {
+        return false;
+      }
+    }
+
     return true;
   } catch {
     return false;
   }
 }
 
-// 验证代理请求的鉴权
-// 当前公开部署：普通访客无需 PASSWORD 即可使用视频代理
-function validateProxyAuth(req) {
-  return true;
-}
-
 // ==================== 公共代理限流 ====================
+
 // 同一 IP 每 60 秒最多 120 次 /proxy/ 请求
 const proxyRateLimit = new Map();
 const PROXY_RATE_WINDOW = 60 * 1000;
 const PROXY_RATE_MAX = 120;
 
 function checkProxyRateLimit(req) {
-  const forwarded = req.headers['cf-connecting-ip'] ||
-                    req.headers['x-forwarded-for'] ||
-                    req.socket.remoteAddress ||
-                    'unknown';
+  const forwarded =
+    req.headers['cf-connecting-ip'] ||
+    req.headers['x-forwarded-for'] ||
+    req.socket.remoteAddress ||
+    'unknown';
 
   const ip = String(forwarded).split(',')[0].trim();
   const now = Date.now();
@@ -163,16 +159,10 @@ function checkProxyRateLimit(req) {
   return record.count <= PROXY_RATE_MAX;
 }
 
+// ==================== 视频代理 ====================
+
 app.get('/proxy/:encodedUrl', async (req, res) => {
   try {
-    // 验证鉴权
-    if (!validateProxyAuth(req)) {
-      return res.status(401).json({
-        success: false,
-        error: '代理访问未授权：请检查密码配置或鉴权参数'
-      });
-    }
-
     // 公共代理限流
     if (!checkProxyRateLimit(req)) {
       return res.status(429).json({
@@ -194,7 +184,7 @@ app.get('/proxy/:encodedUrl', async (req, res) => {
     // 添加请求超时和重试逻辑
     const maxRetries = config.maxRetries;
     let retries = 0;
-    
+
     const makeRequest = async () => {
       try {
         return await axios({
@@ -204,10 +194,13 @@ app.get('/proxy/:encodedUrl', async (req, res) => {
           timeout: config.timeout,
           headers: {
             'User-Agent': config.userAgent,
-            ...(new URL(targetUrl).hostname.endsWith('doubanio.com') ? {
-              'Referer': 'https://movie.douban.com/',
-              'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'
-            } : {})
+
+            ...(new URL(targetUrl).hostname.endsWith('doubanio.com')
+              ? {
+                  'Referer': 'https://movie.douban.com/',
+                  'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'
+                }
+              : {})
           }
         });
       } catch (error) {
@@ -216,6 +209,7 @@ app.get('/proxy/:encodedUrl', async (req, res) => {
           log(`重试请求 (${retries}/${maxRetries}): ${targetUrl}`);
           return makeRequest();
         }
+
         throw error;
       }
     };
@@ -224,50 +218,65 @@ app.get('/proxy/:encodedUrl', async (req, res) => {
 
     // 转发响应头（过滤敏感头）
     const headers = { ...response.headers };
+
     const sensitiveHeaders = (
-      process.env.FILTERED_HEADERS || 
+      process.env.FILTERED_HEADERS ||
       'content-security-policy,cookie,set-cookie,x-frame-options,access-control-allow-origin'
     ).split(',');
-    
-    sensitiveHeaders.forEach(header => delete headers[header]);
+
+    sensitiveHeaders.forEach(header => {
+      delete headers[header];
+    });
+
     res.set(headers);
 
     // 管道传输响应流
     response.data.pipe(res);
+
   } catch (error) {
     console.error('代理请求错误:', error.message);
+
     if (error.response) {
       res.status(error.response.status || 500);
-      error.response.data.pipe(res);
+
+      if (error.response.data && typeof error.response.data.pipe === 'function') {
+        error.response.data.pipe(res);
+      } else {
+        res.send('请求失败');
+      }
     } else {
       res.status(500).send(`请求失败: ${error.message}`);
     }
   }
 });
 
+// ==================== 静态文件 ====================
+
 app.use(express.static(path.join(__dirname), {
   maxAge: config.cacheMaxAge
 }));
+
+// ==================== 全局错误处理 ====================
 
 app.use((err, req, res, next) => {
   console.error('服务器错误:', err);
   res.status(500).send('服务器内部错误');
 });
 
+// ==================== 404 ====================
+
 app.use((req, res) => {
   res.status(404).send('页面未找到');
 });
 
-// 启动服务器
+// ==================== 启动服务器 ====================
+
 app.listen(config.port, () => {
-  console.log(`服务器运行在 http://localhost:${config.port}`);
-  if (config.password !== '') {
-    console.log('用户登录密码已设置');
-  } else {
-    console.log('警告: 未设置 PASSWORD 环境变量，用户将被要求设置密码');
-  }
+  console.log(`宁阳TV服务器运行在 http://localhost:${config.port}`);
+
   if (config.debug) {
     console.log('调试模式已启用');
-    console.log('配置:', { ...config, password: config.password ? '******' : '' });
+    console.log('配置:', config);
   }
 });
+```
