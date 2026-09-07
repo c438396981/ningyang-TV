@@ -1,4 +1,3 @@
-```js
 import path from 'path';
 import express from 'express';
 import axios from 'axios';
@@ -279,4 +278,3 @@ app.listen(config.port, () => {
     console.log('配置:', config);
   }
 });
-```
