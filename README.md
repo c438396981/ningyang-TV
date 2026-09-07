@@ -36,7 +36,7 @@
 
 5. **启动开发服务器**
    ```bash
-    npm docker compose up -d
+   npm docker compose up -d
    ```
 
 6. **访问应用**
